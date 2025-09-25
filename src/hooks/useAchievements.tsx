@@ -216,14 +216,7 @@ export const useAchievements = () => {
 
     if (newlyUnlocked.length > 0) {
       setNewBadges(newlyUnlocked);
-      // Show celebration for new badges
-      newlyUnlocked.forEach(badge => {
-        toast({
-          title: `🎉 Nova Conquista Desbloqueada!`,
-          description: `${badge.name}: ${badge.description}`,
-          duration: 5000,
-        });
-      });
+      // Only show celebration popup - no duplicate toasts
     }
   };
 
@@ -333,16 +326,18 @@ export const useAchievements = () => {
   };
 
   const dismissNewBadges = async () => {
-    if (!user) return;
+    if (!user || newBadges.length === 0) return;
 
     // Mark badges as not new in database
     const newBadgeIds = newBadges.map(b => b.id);
-    if (newBadgeIds.length > 0) {
+    try {
       await supabase
         .from('achievements')
         .update({ is_new: false })
         .eq('user_id', user.id)
         .in('achievement_template_id', newBadgeIds);
+    } catch (error) {
+      console.error('Error updating achievements:', error);
     }
 
     setNewBadges([]);

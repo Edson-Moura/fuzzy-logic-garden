@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { X, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useCelebrationContext } from '@/contexts/CelebrationContext';
 
 interface CelebrationProps {
   badges: BadgeType[];
@@ -15,10 +16,18 @@ interface CelebrationProps {
 export const Celebration: React.FC<CelebrationProps> = ({ badges, onDismiss, show }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [confetti, setConfetti] = useState<Array<{ id: number; x: number; delay: number; color: string }>>([]);
+  const { markAsShown, shouldShowCelebration } = useCelebrationContext();
+
+  // Filter badges to only show ones that haven't been celebrated yet
+  const badgesToShow = badges.filter(badge => shouldShowCelebration([badge]));
+  const shouldShow = show && badgesToShow.length > 0;
 
   useEffect(() => {
-    if (show && badges.length > 0) {
+    if (shouldShow && badgesToShow.length > 0) {
       setIsVisible(true);
+      
+      // Mark badges as shown to prevent duplicate celebrations
+      markAsShown(badgesToShow.map(b => b.id));
       
       // Generate confetti
       const newConfetti = Array.from({ length: 50 }, (_, i) => ({
@@ -35,8 +44,11 @@ export const Celebration: React.FC<CelebrationProps> = ({ badges, onDismiss, sho
       }, 5000);
       
       return () => clearTimeout(timer);
+    } else if (!shouldShow) {
+      setIsVisible(false);
+      setConfetti([]);
     }
-  }, [show, badges]);
+  }, [shouldShow, badgesToShow.length, markAsShown]); // Only depend on shouldShow and badgesToShow length
 
   const handleDismiss = () => {
     setIsVisible(false);
@@ -46,7 +58,7 @@ export const Celebration: React.FC<CelebrationProps> = ({ badges, onDismiss, sho
     }, 300);
   };
 
-  if (!show || badges.length === 0) return null;
+  if (!shouldShow || badgesToShow.length === 0) return null;
 
   return (
     <>
@@ -86,9 +98,9 @@ export const Celebration: React.FC<CelebrationProps> = ({ badges, onDismiss, sho
                   <Sparkles className="w-6 h-6 text-yellow-500 animate-pulse" />
                 </CardTitle>
                 <p className="text-muted-foreground">
-                  {badges.length === 1 
+                  {badgesToShow.length === 1 
                     ? 'Você desbloqueou uma nova conquista!'
-                    : `Você desbloqueou ${badges.length} novas conquistas!`
+                    : `Você desbloqueou ${badgesToShow.length} novas conquistas!`
                   }
                 </p>
               </div>
@@ -106,7 +118,7 @@ export const Celebration: React.FC<CelebrationProps> = ({ badges, onDismiss, sho
           <CardContent className="space-y-6">
             {/* Badge Display */}
             <div className="flex justify-center gap-4">
-              {badges.slice(0, 3).map((badge) => (
+              {badgesToShow.slice(0, 3).map((badge) => (
                 <div key={badge.id} className="animate-fade-in">
                   <Badge 
                     badge={badge} 
@@ -120,7 +132,7 @@ export const Celebration: React.FC<CelebrationProps> = ({ badges, onDismiss, sho
             
             {/* Badge Details */}
             <div className="space-y-3">
-              {badges.slice(0, 2).map((badge, index) => (
+              {badgesToShow.slice(0, 2).map((badge, index) => (
                 <div 
                   key={badge.id}
                   className="text-center p-3 bg-muted rounded-lg animate-fade-in"
@@ -131,9 +143,9 @@ export const Celebration: React.FC<CelebrationProps> = ({ badges, onDismiss, sho
                 </div>
               ))}
               
-              {badges.length > 2 && (
+              {badgesToShow.length > 2 && (
                 <div className="text-center text-sm text-muted-foreground">
-                  E mais {badges.length - 2} conquista{badges.length - 2 > 1 ? 's' : ''}!
+                  E mais {badgesToShow.length - 2} conquista{badgesToShow.length - 2 > 1 ? 's' : ''}!
                 </div>
               )}
             </div>
