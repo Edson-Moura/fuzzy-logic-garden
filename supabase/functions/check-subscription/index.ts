@@ -60,6 +60,13 @@ serve(async (req) => {
       logStep("STRIPE_SECRET_KEY not found");
       throw new Error("STRIPE_SECRET_KEY is not set");
     }
+    
+    // Validate that we have a secret key, not a publishable key
+    if (!stripeKey.startsWith('sk_')) {
+      logStep("Invalid Stripe key - must be secret key starting with sk_");
+      throw new Error("Invalid Stripe key - must be secret key starting with sk_");
+    }
+    
     logStep("Stripe key verified");
 
     const authHeader = req.headers.get("Authorization");
@@ -172,9 +179,29 @@ serve(async (req) => {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logStep("ERROR in check-subscription", { message: errorMessage });
-    return new Response(JSON.stringify({ error: errorMessage }), {
+    
+    // For Stripe key errors, return a more specific error
+    if (errorMessage.includes("publishable API key") || errorMessage.includes("Invalid Stripe key")) {
+      return new Response(JSON.stringify({ 
+        error: "Configuração do Stripe inválida. Entre em contato com o suporte.",
+        subscribed: false,
+        subscription_tier: null,
+        subscription_end: null
+      }), {
+        headers: { ...responseHeaders, "Content-Type": "application/json" },
+        status: 200, // Return 200 to avoid breaking the UI
+      });
+    }
+    
+    // For other errors, return unsubscribed state
+    return new Response(JSON.stringify({ 
+      error: "Erro temporário. Tente novamente em alguns instantes.",
+      subscribed: false,
+      subscription_tier: null,
+      subscription_end: null
+    }), {
       headers: { ...responseHeaders, "Content-Type": "application/json" },
-      status: 500,
+      status: 200,
     });
   }
 });

@@ -56,6 +56,19 @@ export const useSubscription = () => {
           }, 'useSubscription', user.id);
           
           setSubscriptionData(newSubscriptionData);
+          
+          // Don't show error toast if the response contains an error but still has subscription data
+          if (data.error && !data.subscribed) {
+            // Only show error for real failures, not configuration issues
+            if (!data.error.includes('Configuração do Stripe')) {
+              toast({
+                title: "Aviso",
+                description: data.error,
+                variant: "default",
+              });
+            }
+          }
+          
           return newSubscriptionData;
         } catch (error) {
           // Log the error but don't throw - handle gracefully

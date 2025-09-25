@@ -16,18 +16,22 @@ interface CelebrationProps {
 export const Celebration: React.FC<CelebrationProps> = ({ badges, onDismiss, show }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [confetti, setConfetti] = useState<Array<{ id: number; x: number; delay: number; color: string }>>([]);
+  const [celebratingBadges, setCelebratingBadges] = useState<Set<string>>(new Set());
   const { markAsShown, shouldShowCelebration } = useCelebrationContext();
 
   // Filter badges to only show ones that haven't been celebrated yet
-  const badgesToShow = badges.filter(badge => shouldShowCelebration([badge]));
+  const badgesToShow = badges.filter(badge => 
+    shouldShowCelebration([badge]) && !celebratingBadges.has(badge.id)
+  );
   const shouldShow = show && badgesToShow.length > 0;
 
   useEffect(() => {
     if (shouldShow && badgesToShow.length > 0) {
-      setIsVisible(true);
+      // Immediately mark these badges as being celebrated to prevent duplicates
+      const badgeIds = badgesToShow.map(b => b.id);
+      setCelebratingBadges(prev => new Set([...prev, ...badgeIds]));
       
-      // Mark badges as shown to prevent duplicate celebrations
-      markAsShown(badgesToShow.map(b => b.id));
+      setIsVisible(true);
       
       // Generate confetti
       const newConfetti = Array.from({ length: 50 }, (_, i) => ({
@@ -48,13 +52,20 @@ export const Celebration: React.FC<CelebrationProps> = ({ badges, onDismiss, sho
       setIsVisible(false);
       setConfetti([]);
     }
-  }, [shouldShow, badgesToShow.length, markAsShown]); // Only depend on shouldShow and badgesToShow length
+  }, [shouldShow]); // Only depend on shouldShow
 
   const handleDismiss = () => {
     setIsVisible(false);
+    
+    // Mark badges as shown in the context only when dismissing
+    if (badgesToShow.length > 0) {
+      markAsShown(badgesToShow.map(b => b.id));
+    }
+    
     setTimeout(() => {
       onDismiss();
       setConfetti([]);
+      setCelebratingBadges(new Set()); // Clear celebrating badges
     }, 300);
   };
 
