@@ -89,7 +89,7 @@ export const Header = () => {
             asChild
           >
             <a 
-              href="https://w.app/myenglishone" 
+              href="https://wa.me/5516991779261?text=Ola%20eu%20tenho%20uma%20d%C3%BAvida" 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center gap-1 md:gap-2"
