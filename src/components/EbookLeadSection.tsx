@@ -132,43 +132,62 @@ const { toast } = useToast();
           <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
             10 Erros Comuns de Aprendizado de Inglês e Como Evitá-los
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            Melhore seu inglês de forma rápida e eficiente ao evitar esses erros comuns.
-          </p>
+          <div className="max-w-2xl mx-auto mb-8">
+            <p className="text-xl text-muted-foreground mb-4">
+              Melhore seu inglês de forma rápida e eficiente ao evitar esses erros comuns.
+            </p>
+            <div className="p-4 rounded-lg bg-primary/10 border-l-4 border-primary">
+              <p className="text-lg font-semibold text-primary">
+                ✨ <span className="bg-primary/20 px-2 py-1 rounded">Download Instantâneo</span> - Receba agora mesmo em seu email!
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <div className="flex items-start space-x-4">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+            <div className="flex items-start space-x-4 p-4 rounded-lg bg-accent/10 border border-accent/20">
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-glow">
                 <span className="text-primary-foreground font-semibold text-sm">1</span>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">Não Praticar a Pronúncia Correta</h3>
+                <h3 className="font-semibold mb-2 text-foreground">
+                  <span className="bg-accent/20 px-2 py-1 rounded text-accent-foreground">
+                    Não Praticar a Pronúncia Correta
+                  </span>
+                </h3>
                 <p className="text-muted-foreground">
                   Muitos estudantes ignoram a pronúncia ao aprenderem novas palavras
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start space-x-4">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+            <div className="flex items-start space-x-4 p-4 rounded-lg bg-accent/10 border border-accent/20">
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-glow">
                 <span className="text-primary-foreground font-semibold text-sm">2</span>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">Focar Apenas em Gramática</h3>
+                <h3 className="font-semibold mb-2 text-foreground">
+                  <span className="bg-accent/20 px-2 py-1 rounded text-accent-foreground">
+                    Focar Apenas em Gramática
+                  </span>
+                </h3>
                 <p className="text-muted-foreground">
                   Balanceie o estudo da gramática com atividades práticas de conversação
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start space-x-4">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+            <div className="flex items-start space-x-4 p-4 rounded-lg bg-accent/10 border border-accent/20">
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-1 shadow-glow">
                 <span className="text-primary-foreground font-semibold text-sm">3</span>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">Traduzir Diretamente do Português</h3>
+                <h3 className="font-semibold mb-2 text-foreground">
+                  <span className="bg-accent/20 px-2 py-1 rounded text-accent-foreground">
+                    Traduzir Diretamente do Português
+                  </span>
+                </h3>
                 <p className="text-muted-foreground">
                   Traduzir palavra por palavra pode levar a construções gramaticais incorretas
                 </p>
