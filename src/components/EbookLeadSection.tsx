@@ -129,8 +129,8 @@ const { toast } = useToast();
               <BookOpen className="w-12 h-12 text-primary" />
             </div>
           </div>
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-            10 Erros Comuns de Aprendizado de Inglês e Como Evitá-los
+          <h2 className="text-4xl font-bold mb-4">
+            <span className="text-destructive">10 Erros Comuns</span> <span className="bg-gradient-primary bg-clip-text text-transparent">de Aprendizado de Inglês e Como Evitá-los</span>
           </h2>
           <div className="max-w-2xl mx-auto mb-8">
             <p className="text-xl text-muted-foreground mb-4">
