@@ -24,6 +24,19 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     console.log("Starting send-ebook function...");
     
+    // Check if Resend API key is configured
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    if (!resendApiKey) {
+      console.error("RESEND_API_KEY not configured");
+      return new Response(
+        JSON.stringify({ error: "Serviço de email não configurado" }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+    
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
@@ -131,6 +144,15 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Sending email to:", email, "with ebook:", chosenFilename);
     
+    // Add detailed logging for debugging
+    console.log("Email data:", {
+      from: "MyEnglishOne <noreply@myenglishone.com>",
+      to: [email],
+      subject: "🎉 Seu Ebook Gratuito: 10 Erros Comuns de Aprendizado de Inglês",
+      hasAttachment: !!ebookContent,
+      attachmentSize: ebookContent ? ebookContent.length : 0
+    });
+    
     if (!ebookContent) {
       console.error("No ebook content available for email");
       return new Response(
@@ -227,11 +249,12 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     if (emailResponse.error) {
-      console.error('Resend error details:', JSON.stringify(emailResponse.error));
+      console.error('Resend error details:', JSON.stringify(emailResponse.error, null, 2));
       return new Response(
         JSON.stringify({ 
           error: "Erro no envio do email", 
-          message: emailResponse.error.message || "Erro desconhecido no Resend"
+          message: emailResponse.error.message || "Erro desconhecido no Resend",
+          details: emailResponse.error
         }),
         {
           status: 500,
@@ -240,7 +263,7 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log("Ebook sent successfully:", emailResponse);
+    console.log("Ebook sent successfully:", JSON.stringify(emailResponse, null, 2));
 
     return new Response(JSON.stringify({ success: true, message: "Ebook enviado com sucesso!" }), {
       status: 200,
