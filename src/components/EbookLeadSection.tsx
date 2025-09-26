@@ -195,17 +195,30 @@ const { toast } = useToast();
             </div>
           </div>
 
-          <Card className="shadow-elegant border-primary/20">
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl">Baixe Gratuitamente</CardTitle>
-              <CardDescription>
-                Digite seus dados para receber o ebook instantaneamente
+          <Card className="shadow-elegant border-2 border-primary/30 bg-gradient-to-br from-card to-card/80 relative overflow-hidden">
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-full -translate-y-10 translate-x-10"></div>
+            <div className="absolute bottom-0 left-0 w-16 h-16 bg-accent/20 rounded-full translate-y-8 -translate-x-8"></div>
+            
+            <CardHeader className="text-center relative z-10">
+              <div className="inline-block p-2 bg-primary/10 rounded-full mb-3 mx-auto">
+                <Download className="w-8 h-8 text-primary" />
+              </div>
+              <CardTitle className="text-3xl bg-gradient-primary bg-clip-text text-transparent">
+                🎁 Baixe Gratuitamente
+              </CardTitle>
+              <CardDescription className="text-lg">
+                <span className="font-semibold text-foreground">Digite seus dados para receber o ebook</span>
+                <br />
+                <span className="bg-accent/20 px-2 py-1 rounded text-accent-foreground font-medium">
+                  📧 instantaneamente
+                </span>
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
+            <CardContent className="relative z-10">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Nome (opcional)</Label>
+                  <Label htmlFor="name" className="text-sm font-medium">Nome (opcional)</Label>
                   <Input
                     id="name"
                     type="text"
@@ -213,11 +226,16 @@ const { toast } = useToast();
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     disabled={isLoading}
+                    className="border-2 focus:border-primary/50 transition-all duration-300"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email *</Label>
+                  <Label htmlFor="email" className="text-sm font-medium flex items-center gap-1">
+                    Email 
+                    <span className="text-destructive font-bold">*</span>
+                    <span className="bg-green/20 text-green px-1 py-0.5 rounded text-xs font-medium">Obrigatório</span>
+                  </Label>
                   <Input
                     id="email"
                     type="email"
@@ -226,30 +244,34 @@ const { toast } = useToast();
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     disabled={isLoading}
+                    className="border-2 focus:border-primary/50 transition-all duration-300"
                   />
                 </div>
 
-                <Button 
-                  type="submit" 
-                  className="w-full"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Enviando...
-                    </>
-                  ) : (
-                    <>
-                      <Download className="w-4 h-4 mr-2" />
-                      Baixar Ebook Gratuito
-                    </>
-                  )}
-                </Button>
+                <div className="pt-2">
+                  <Button 
+                    type="submit" 
+                    className="w-full h-12 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 animate-pulse hover:animate-none"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                        Enviando...
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-5 h-5 mr-2" />
+                        🚀 Baixar Ebook Gratuito Agora
+                      </>
+                    )}
+                  </Button>
+                </div>
 
-                <p className="text-xs text-muted-foreground text-center">
-                  Seus dados estão protegidos. Não enviamos spam.
-                </p>
+                <div className="flex items-center justify-center space-x-2 text-xs text-muted-foreground bg-muted/30 p-3 rounded-lg">
+                  <div className="w-2 h-2 bg-green rounded-full"></div>
+                  <span>Seus dados estão protegidos. Não enviamos spam.</span>
+                </div>
               </form>
             </CardContent>
           </Card>
