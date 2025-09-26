@@ -30,9 +30,13 @@ export const Header = () => {
             alt="MyEnglishOne Logo" 
             className="w-8 h-8 md:w-10 md:h-10 object-contain flex-shrink-0"
           />
-          <span className="text-sm md:text-lg lg:text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-            <span className="hidden lg:inline">MyEnglishOne</span>
-            <span className="lg:hidden">MyEnglish</span>
+          <span className="text-sm md:text-lg lg:text-xl font-bold">
+            <span className="hidden lg:inline">
+              <span className="bg-gradient-hero bg-clip-text text-transparent">MyEnglish</span><span className="text-green-600">One</span>
+            </span>
+            <span className="lg:hidden">
+              <span className="bg-gradient-hero bg-clip-text text-transparent">MyEnglish</span>
+            </span>
           </span>
         </Link>
         
