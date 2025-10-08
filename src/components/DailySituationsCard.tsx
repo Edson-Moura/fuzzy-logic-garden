@@ -10,6 +10,16 @@ import drivingWorkImage from '@/assets/daily-situations/driving-work.jpg';
 import takingShowerImage from '@/assets/daily-situations/taking-shower.jpg';
 import watchingTvImage from '@/assets/daily-situations/watching-tv.jpg';
 
+// Category images
+import sunnyDayImage from '@/assets/categories/sunny-day.jpg';
+import rainyDayImage from '@/assets/categories/rainy-day.jpg';
+import coldDayImage from '@/assets/categories/cold-day.jpg';
+import pizzaImage from '@/assets/categories/pizza.jpg';
+import deliciousFoodImage from '@/assets/categories/delicious-food.jpg';
+import colorsImage from '@/assets/categories/colors.jpg';
+import familyImage from '@/assets/categories/family.jpg';
+import hobbiesImage from '@/assets/categories/hobbies.jpg';
+
 interface DailySituationsCardProps {
   sentence: {
     id: string;
@@ -20,7 +30,9 @@ interface DailySituationsCardProps {
   exerciseType?: string;
 }
 
-const imageMap: Record<string, string> = {
+// Map sentences to specific images
+const sentenceImageMap: Record<string, string> = {
+  // Daily situations
   'I am drinking coffee in the morning': morningCoffeeImage,
   'She is cooking dinner in the kitchen': cookingDinnerImage,
   'He is reading a book on the sofa': readingBookImage,
@@ -31,14 +43,57 @@ const imageMap: Record<string, string> = {
   'He is driving to work': drivingWorkImage,
   'I am taking a shower': takingShowerImage,
   'We are watching TV together': watchingTvImage,
+  
+  // Weather/Clima
+  'I love sunny days.': sunnyDayImage,
+  'It is sunny today.': sunnyDayImage,
+  'The weather is nice.': sunnyDayImage,
+  'It is raining outside.': rainyDayImage,
+  'It is very cold today.': coldDayImage,
+  
+  // Food/Comida
+  'I like pizza very much.': pizzaImage,
+  'The food is delicious.': deliciousFoodImage,
+  'I am hungry.': deliciousFoodImage,
 };
 
+// Map categories to default images
+const categoryImageMap: Record<string, string> = {
+  'daily_situations': morningCoffeeImage,
+  'Clima': sunnyDayImage,
+  'weather': sunnyDayImage,
+  'Comida': deliciousFoodImage,
+  'restaurant': deliciousFoodImage,
+  'colors': colorsImage,
+  'Cores': colorsImage,
+  'Família': familyImage,
+  'Hobbies': hobbiesImage,
+  'hobbies': hobbiesImage,
+};
+
+// Categories that should display images
+const illustratedCategories = [
+  'daily_situations',
+  'Clima',
+  'weather',
+  'Comida',
+  'restaurant',
+  'colors',
+  'Cores',
+  'Família',
+  'Hobbies',
+  'hobbies',
+];
+
 export const DailySituationsCard = ({ sentence, exerciseType }: DailySituationsCardProps) => {
-  if (sentence.category !== 'daily_situations') {
+  // Check if sentence category should have illustrations
+  if (!sentence.category || !illustratedCategories.includes(sentence.category)) {
     return null;
   }
 
-  const imageSrc = imageMap[sentence.english_text];
+  // Try to get specific image for sentence, fallback to category default
+  const imageSrc = sentenceImageMap[sentence.english_text] || 
+                   (sentence.category ? categoryImageMap[sentence.category] : undefined);
 
   return (
     <Card className="shadow-card mb-6">
