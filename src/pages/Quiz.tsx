@@ -99,16 +99,16 @@ const QuizPage = () => {
     
     switch (type) {
       case 'practice':
-        questions = generateQuizQuestions('beginner', 10);
+        questions = generateQuizQuestions('beginner', 20);
         break;
       case 'timed':
-        questions = generateQuizQuestions('intermediate', 15);
+        questions = generateQuizQuestions('intermediate', 25);
         break;
       case 'challenge':
         // Mix of all levels
-        const beginnerQuestions = generateQuizQuestions('beginner', 5);
-        const intermediateQuestions = generateQuizQuestions('intermediate', 5);
-        const advancedQuestions = generateQuizQuestions('advanced', 5);
+        const beginnerQuestions = generateQuizQuestions('beginner', 10);
+        const intermediateQuestions = generateQuizQuestions('intermediate', 10);
+        const advancedQuestions = generateQuizQuestions('advanced', 10);
         questions = [...beginnerQuestions, ...intermediateQuestions, ...advancedQuestions]
           .sort(() => Math.random() - 0.5);
         break;
