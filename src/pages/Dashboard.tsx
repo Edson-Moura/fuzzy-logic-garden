@@ -27,7 +27,8 @@ import {
   Flame,
   Star,
   Trophy,
-  Crown
+  Crown,
+  Video
 } from 'lucide-react';
 
 const Dashboard = () => {
@@ -290,7 +291,13 @@ const Dashboard = () => {
                       {hasReachedDailyLessonLimit() ? 'Limite Atingido' : 'Começar Lição'}
                     </Link>
                   </Button>
-                  <Button variant="outline" className="h-12 hover-scale group" size="lg" asChild>
+                  <Button variant="secondary" className="h-12 hover-scale group" size="lg" asChild>
+                    <Link to="/live-lesson">
+                      <Video className="w-5 h-5 group-hover:animate-pulse" />
+                      Aula com Alex
+                    </Link>
+                  </Button>
+                  <Button variant="outline" className="h-12 hover-scale group col-span-1 sm:col-span-2" size="lg" asChild>
                     <Link to="/chat">
                       <MessageCircle className="w-5 h-5 group-hover:animate-bounce" />
                       Praticar Conversação

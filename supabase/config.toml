@@ -1,1 +1,16 @@
 project_id = "yttjiuxjuanyzszlrdwj"
+
+[functions.nvidia-chat]
+verify_jwt = false
+
+[functions.nvidia-tts]
+verify_jwt = false
+
+[functions.openai-chat]
+verify_jwt = false
+
+[functions.deepgram-stt]
+verify_jwt = false
+
+[functions.elevenlabs-tts]
+verify_jwt = false

@@ -17,6 +17,7 @@ import Lesson from "./pages/Lesson";
 import Achievements from "./pages/Achievements";
 import Chat from "./pages/Chat";
 import Quiz from "./pages/Quiz";
+import LiveLesson from "./pages/LiveLesson";
 import Pricing from "./pages/Pricing";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -50,6 +51,7 @@ const App = () => (
                 <Route path="/achievements" element={<Achievements />} />
                 <Route path="/chat" element={<Chat />} />
                 <Route path="/quiz" element={<Quiz />} />
+                <Route path="/live-lesson" element={<LiveLesson />} />
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
