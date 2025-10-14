@@ -82,19 +82,38 @@ export default function LiveLesson() {
     setIsProcessing(true);
     
     try {
-      // Speech to Text
-      const formData = new FormData();
-      formData.append('audio', audioBlob);
-
-      const { data: sttData, error: sttError } = await supabase.functions.invoke('deepgram-stt', {
-        body: formData,
+      console.log('Processing audio blob:', audioBlob.size, 'bytes');
+      
+      // Convert blob to base64
+      const reader = new FileReader();
+      const base64Audio = await new Promise<string>((resolve, reject) => {
+        reader.onloadend = () => {
+          const base64 = (reader.result as string).split(',')[1];
+          resolve(base64);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(audioBlob);
       });
+
+      console.log('Converted to base64, length:', base64Audio.length);
+
+      // Speech to Text
+      const { data: sttData, error: sttError } = await supabase.functions.invoke('deepgram-stt', {
+        body: { audio: base64Audio },
+      });
+
+      console.log('STT response:', sttData, sttError);
 
       if (sttError) throw sttError;
 
       const userText = sttData.transcript;
-      if (!userText) {
-        throw new Error('No transcript received');
+      if (!userText || userText.trim() === '') {
+        toast({
+          title: "Não entendi",
+          description: "Tente falar mais alto ou claro",
+          variant: "destructive",
+        });
+        return;
       }
 
       setTranscript(userText);
