@@ -37,8 +37,19 @@ export default function LiveLesson() {
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          channelCount: 1,
+          sampleRate: 16000,
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        } 
+      });
+      
+      // Try to use audio/webm with opus codec for better compatibility
+      const options: MediaRecorderOptions = { mimeType: 'audio/webm;codecs=opus' };
+      const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -49,7 +60,19 @@ export default function LiveLesson() {
       };
 
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' });
+        console.log('Audio blob size:', audioBlob.size, 'type:', audioBlob.type);
+        
+        if (audioBlob.size < 1000) {
+          toast({
+            title: "Áudio muito curto",
+            description: "Por favor, fale por mais tempo",
+            variant: "destructive",
+          });
+          stream.getTracks().forEach(track => track.stop());
+          return;
+        }
+        
         await processAudio(audioBlob);
         stream.getTracks().forEach(track => track.stop());
       };

@@ -56,12 +56,12 @@ serve(async (req) => {
 
     console.log('Sending to Deepgram...');
     const response = await fetch(
-      'https://api.deepgram.com/v1/listen?model=nova-2&language=en&smart_format=true',
+      'https://api.deepgram.com/v1/listen?model=nova-2&language=en&punctuate=true&utterances=true',
       {
         method: 'POST',
         headers: {
           'Authorization': `Token ${DEEPGRAM_API_KEY}`,
-          'Content-Type': audioBlob.type,
+          'Content-Type': 'audio/webm',
         },
         body: audioBlob,
       }
